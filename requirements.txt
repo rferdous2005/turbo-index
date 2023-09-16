@@ -1,0 +1,4 @@
+matplotlib
+pysondb-v2
+numpy
+pandas
