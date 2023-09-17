@@ -57,9 +57,10 @@ sectorwise = {
     'Paper':['BPPL','KPPL', 'BPML','SONALIPAPR','PAPERPROC'],
     'Engineering': [],
     'Fuel': [],
+    'BOND': ['AIBLPBOND','APSCLBOND','CBLPBOND','IBBL2PBOND','IBBLPBOND','PBLPBOND','PREBPBOND','SJIBLPBOND',],
     'Others':[]
 }
-print(len(all))
-for item in all:
-    if "KNIT" in item:
-        print(item+", ")
+# print(len(all))
+# for item in all:
+#     if "BOND" in item:
+#         print(item+", ")
