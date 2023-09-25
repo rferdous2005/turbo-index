@@ -1,7 +1,10 @@
 import pandas as pd
 from database.static import *
 import numpy as np
-from warehouse.db import connectDB
+#from warehouse.db import connectDB
+from openpyxl import Workbook
+import openpyxl
+
 
 def loadWarehouse(fromYear, toYear):
     for y in range(fromYear, toYear+1):
@@ -10,7 +13,7 @@ def loadWarehouse(fromYear, toYear):
             print("Year "+ str(y) +" Scrip "+c)
             filtered_df = df[df['Scrip'] == c]
             filtered_df = filtered_df.sort_values(by=['DayIndex'])
-            applyMultipleTurbo(company=c, year=y, dataframe=filtered_df, turboX=[3,5,7,11,22,44,66])
+            applyMultipleTurbo(company=c, year=y, dataframe=filtered_df, turboX=[1,3,5,7,11,22,44])
             #print(c, filtered_df)
             break
         #print(filtered_df)
@@ -57,8 +60,8 @@ def applyMultipleTurbo(company, year, dataframe, turboX):
             for d in range(dayIndex1, dayIndex2+1):
                 print(weights[d]+ rr)
                 weights[d] = round(rr, 4)+weights[d]
-        dbCon = connectDB()
+        #dbCon = connectDB()
         print(weights, rr)
 
-
-loadWarehouse(2016,2016)
+wb = openpyxl.load_workbook("example.xlsx")
+#loadWarehouse(2016,2016)
