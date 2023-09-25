@@ -70,11 +70,11 @@ def applyMultipleTurbo(company, year, dataframe, turboX):
         df = None
         wb = None
 
-        # if not os.path.isfile(path):
-        #     wb = Workbook()
-        #     ws = wb.active
-        #     ws.title = company
-        if True:
+        if not os.path.isfile(path):
+            wb = Workbook()
+            ws = wb.active
+            ws.title = company
+        else:
             wb = openpyxl.load_workbook(path)
             if company not in wb.sheetnames:
                 ws = wb.create_sheet(company)
