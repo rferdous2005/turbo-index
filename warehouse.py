@@ -63,5 +63,5 @@ def applyMultipleTurbo(company, year, dataframe, turboX):
         #dbCon = connectDB()
         print(weights, rr)
 
-wb = openpyxl.load_workbook("example.xlsx")
+#wb = openpyxl.load_workbook("example.xlsx")
 #loadWarehouse(2016,2016)
