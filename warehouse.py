@@ -78,10 +78,11 @@ def applyMultipleTurbo(company, year, dataframe, turboX):
             wb = openpyxl.load_workbook(path)
             if company not in wb.sheetnames:
                 ws = wb.create_sheet(company)
-        
+        if not os.path.isdir("warehouse/"+str(turbo)+"/"):
+            os.mkdir("warehouse/"+str(turbo)+"/")
         wb.save(path)
-
         df = pd.read_excel(path, sheet_name=company)
+        print(df.columns)
         # no columns yet, set 1st Date col
         if "Date" not in df.columns:
             df['Date'] = DateLabels
