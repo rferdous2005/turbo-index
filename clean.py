@@ -2,6 +2,7 @@ import pandas as pd
 import os
 from datetime import datetime
 import numpy as np
+from database.static import all
 
 
 path = "database/Dhaka-Stock-Exchange-DSE-"
@@ -56,4 +57,8 @@ def mergeCSV():
     df=df.sort_values(by=['Scrip', 'Date'])
     #print(df)
     df.to_csv('merged_files.csv', index=False)
+
+# for c in all:
+#     if c[0] == 'Z':
+#         print(c)
     

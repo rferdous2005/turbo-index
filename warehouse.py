@@ -7,14 +7,14 @@ import openpyxl
 from utils import *
 
 
-def loadExcelFiles(fromYear, toYear):
+def loadTurboExcelFiles(fromYear, toYear):
     for y in range(fromYear, toYear+1):
         df = pd.read_csv("database/clean-data/DSE-"+str(y)+".csv", low_memory=False)
         for c in all:
             print("Year "+ str(y) +" Scrip "+c)
             filtered_df = df[df['Scrip'] == c]
             if filtered_df.empty:
-                break
+                continue
             filtered_df = filtered_df.sort_values(by=['DayIndex'])
             applyMultipleTurbo(company=c, year=y, dataframe=filtered_df, turboX=[1,3,5,7,11,22,44])
 
@@ -65,31 +65,29 @@ def applyMultipleTurbo(company, year, dataframe, turboX):
         #dbCon = connectDB()
         #print(weights, rr)
         startL = company[0]
-        path = "warehouse/"+str(turbo)+"/"+startL+".xlsx"
+        path = "C:/Users/User/Documents/warehouse/"+str(turbo)+"/"+startL+".xlsx"
         ws = None
         df = None
         wb = None
-
-        if not os.path.isfile(path):
-            wb = Workbook()
-            ws = wb.active
-            ws.title = company
-        else:
-            wb = openpyxl.load_workbook(path)
-            if company not in wb.sheetnames:
-                ws = wb.create_sheet(company)
-        if not os.path.isdir("warehouse/"+str(turbo)+"/"):
-            os.mkdir("warehouse/"+str(turbo)+"/")
-        wb.save(path)
-        df = pd.read_excel(path, sheet_name=company)
-        print(df.columns)
+        
+        #pandas.ExcelWriter(path, date_format=None, mode=’w’)
+        try:
+            df = pd.read_excel(path, sheet_name=company)
+        except:
+            df = pd.DataFrame({"Date": DateLabels})
+        #print(df)
+        #print(wb.sheetnames)
+        #print(df)
         # no columns yet, set 1st Date col
-        if "Date" not in df.columns:
-            df['Date'] = DateLabels
-        df[str(year)] = weights[1:366]
-        df.to_excel(path, index=False)
+        
+        with pd.ExcelWriter(path, mode="a", engine="openpyxl", if_sheet_exists='overlay') as writer:
+            df[str(year)] = weights[1:366]
+            # use to_excel function and specify the sheet_name and index to
+            df.to_excel(writer, index=False, sheet_name=company)
 
-loadExcelFiles(2010,2022)
+
+
+loadTurboExcelFiles(2010,2022)
 # from openpyxl import Workbook
 # wb = Workbook()
 # ws = wb.active
