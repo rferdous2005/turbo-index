@@ -1,7 +1,6 @@
 import pandas as pd
 from database.static import *
 import numpy as np
-from warehouse import DateLabels
 from openpyxl import Workbook
 import openpyxl
 from utils import *
@@ -48,16 +47,25 @@ def applyMultipleTurbo(company, year, dataframe, turboX):
             #calculateTotalVolume()
             if turbo == 0:
                 turbo = 1
-            if close2 > open1 and close2 > high1:
+            # calculating close - close
+            #if close2 > open1 and close2 > high1:
+            if close2 > close1 and close2 > high1:
                 # apply bullish logic 1.3x
-                rr = (close2-open1)/open1*130.0/turbo
-            elif close2 < open1 and close2 < low1:
+                rr = (close2-close1)/open1*130.0/turbo
+                #rr = (close2-open1)/open1*130.0/turbo
+            #elif close2 < open1 and close2 < low1:
+            elif close2 < close1 and close2 < low1:
                 # apply bearish 1.3x
-                rr = (close2-open1)/open1*130.0/turbo
-            elif close2 > open1:
-                rr = (close2-open1)/open1*80.0/turbo # bullish 0.7x
-            elif close2 < open1:
-                rr = (close2-open1)/open1*80.0/turbo #bearish 0.7x
+                rr = (close2-close1)/open1*130.0/turbo
+                #rr = (close2-open1)/open1*130.0/turbo
+            #elif close2 > open1:
+            elif close2 > close1:
+                rr = (close2-close1)/open1*80.0/turbo
+                #rr = (close2-open1)/open1*80.0/turbo # bullish 0.7x
+            #elif close2 < open1:
+            elif close2 < close1:
+                rr = (close2-close1)/open1*80.0/turbo
+                #rr = (close2-open1)/open1*80.0/turbo #bearish 0.7x
             #print(rr)
             for d in range(dayIndex1, dayIndex2+1):
                 #print(weights[d]+ rr)
@@ -65,11 +73,17 @@ def applyMultipleTurbo(company, year, dataframe, turboX):
         #dbCon = connectDB()
         #print(weights, rr)
         startL = company[0]
-        path = "C:/Users/User/Documents/warehouse/"+str(turbo)+"/"+startL+".xlsx"
+        path = "C:/Users/raiya/OneDrive/Documents/warehouse/"+str(turbo)+"/"+startL+".xlsx"
+        #path = "C:/Users/User/Documents/warehouse/"+str(turbo)+"/"+startL+".xlsx"
         ws = None
         df = None
         wb = None
-        
+        if not os.path.isfile(path):
+            
+            wb = Workbook()
+            ws = wb.active
+            ws.title = company
+            wb.save(path)
         #pandas.ExcelWriter(path, date_format=None, mode=’w’)
         try:
             df = pd.read_excel(path, sheet_name=company)
